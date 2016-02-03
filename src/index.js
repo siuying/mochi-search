@@ -1,41 +1,20 @@
+// # index.js
+// A simple full text search engine based on sqlite3 and Mozilla Porter Stemmer.
+//
+
 import sqlite from 'sqlite3'
 import mozporter from 'sqlite3-mozporter'
 import invariant from 'invariant'
 const debug = require('debug')('search')
 
-const docWithResultSet = (rows) => {
-  return rows.reduce((map, row) => {
-    map[row.field] = row.value
-    return map
-  } , {})
-}
-
-const docsWithResultSet = (rows) => {
-  const objects = rows.reduce((map, row) => {
-    let docId = row.doc_id
-    let field = row.field
-    let value = row.value
-
-    let doc = map[docId]
-    if (!doc) {
-      doc = {}
-      map[docId] = doc
-    }
-    doc[field] = value
-    return map
-  }, {})
-  return Object.keys(objects).map(k => objects[k]);
-}
-
-const docIdsWithResultSet = (rows) => {
-  const resultSet = rows.reduce((set, row) => {
-    set.add(row.doc_id)
-    return set
-  }, new Set());
-  return Array.from(resultSet);
-}
-
 export default class SimpleSearch {
+  /**
+   * ## Constructor
+   * Create a new instance.
+   *
+   * @param {string} filename Filename to the underlying sqlite database, or ":memory:" for memory based database.
+   * @param {function} callback A function that will be called when initialization completed.
+   */
   constructor(filename, callback) {
     debug("open database")
     this.database = mozporter(new sqlite.Database(filename));
@@ -47,8 +26,15 @@ export default class SimpleSearch {
     });
   }
 
-  // Index a document with given ID
-  index(id, doc, callback) {
+  /**
+   * ## SimpleSearch#index
+   *
+   * Index a document with given ID.
+   * @param {integer} id document ID.
+   * @param {object} doc document to be index, should be a simple object that have no nested keys.
+   * @return {Promise} return a promise resolved when index is completed.
+   */
+  index(id, doc) {
     invariant(id, "id cannot be nil");
     invariant(doc, "doc cannot be nil");
 
@@ -68,8 +54,14 @@ export default class SimpleSearch {
     });
   }
 
-  // Get an indexed document by ID
-  get(id, callback) {
+  /**
+   * ## SimpleSearch#get
+   *
+   * Get an indexed document by ID
+   * @param {integer} id document ID.
+   * @return {Promise} return a promise when resolved, result is the corresponding document.
+   */
+  get(id) {
     invariant(id, "id cannot be nil");
 
     return new Promise((resolve, reject) => {
@@ -86,7 +78,15 @@ export default class SimpleSearch {
     });
   }
 
-  search(options, callback) {
+  /**
+   * ## SimpleSearch#search
+   *
+   * Search a document by query.
+   *
+   * @param {object} options an object that can have following keys: ``query``, ``field``, ``fetchIdOnly``
+   * @return {Promise} return a promise when resolved, contain array of objects or ids (depends on fetchIdOnly options)
+   */
+  search(options) {
     const {query, field, fetchIdOnly} = Object.assign({}, {field: null, fetchIdOnly: false}, options);
     invariant(query, "query cannot be null");
     return new Promise((resolve, reject) => {
@@ -128,8 +128,14 @@ export default class SimpleSearch {
     });
   }
 
-  // Count number of document indexed
-  count(callback) {
+  /**
+   * ## SimpleSearch#count
+   *
+   * Count number of document indexed.
+   *
+   * @return {Promise} return a promise when resolved, return the number of document indexed.
+   */
+  count() {
     return new Promise((resolve, reject) => {
       this.database.get(`select count(distinct doc_id) as count from ig_search`, (error, result) => {
         if (error) {
@@ -144,7 +150,7 @@ export default class SimpleSearch {
   }
 
   // close database
-  close(callback) {
+  close() {
     return new Promise((resolve, reject) => {
       // clean up statemenets
       Object.keys(this.statements).forEach(s => s.finalize());
@@ -156,4 +162,45 @@ export default class SimpleSearch {
     });
   }
 
+}
+
+/**
+ * a filter that convert rows of results into a document.
+ */
+function docWithResultSet(rows) {
+  return rows.reduce((map, row) => {
+    map[row.field] = row.value
+    return map
+  } , {})
+}
+
+/**
+ * a filter that convert rows of results into array of document objects.
+ */
+function docsWithResultSet(rows) {
+  const objects = rows.reduce((map, row) => {
+    let docId = row.doc_id
+    let field = row.field
+    let value = row.value
+
+    let doc = map[docId]
+    if (!doc) {
+      doc = {}
+      map[docId] = doc
+    }
+    doc[field] = value
+    return map
+  }, {})
+  return Object.keys(objects).map(k => objects[k]);
+}
+
+/**
+ * a filter that convert rows of results into array of document ids.
+ */
+function docIdsWithResultSet(rows) {
+  const resultSet = rows.reduce((set, row) => {
+    set.add(row.doc_id)
+    return set
+  }, new Set());
+  return Array.from(resultSet);
 }

@@ -6,10 +6,11 @@
   "scripts": {
     "start": "babel src -d dist --watch",
     "build": "babel src -d dist",
+    "docs": "docker -i src -o docs",
     "test": "DEBUG=search mocha --compilers js:babel-register"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "invariant": "^2.2.0",
     "sqlite3": "^3.1.1",
@@ -20,6 +21,7 @@
     "babel-register": "^6.4.3",
     "chai": "^3.5.0",
     "debug": "^2.2.0",
+    "docker": "^0.2.14",
     "mocha": "^2.4.5"
   }
 }
