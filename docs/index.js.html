@@ -25,19 +25,19 @@
         <a href="#constructor">Constructor</a>
       </div>
       <div class="heading h2">
-        <a href="#simplesearch%23index">SimpleSearch#index</a>
+        <a href="#mochisearch%23index">MochiSearch#index</a>
       </div>
       <div class="heading h2">
-        <a href="#simplesearch%23get">SimpleSearch#get</a>
+        <a href="#mochisearch%23get">MochiSearch#get</a>
       </div>
       <div class="heading h2">
-        <a href="#simplesearch%23search">SimpleSearch#search</a>
+        <a href="#mochisearch%23search">MochiSearch#search</a>
       </div>
       <div class="heading h2">
-        <a href="#simplesearch%23count">SimpleSearch#count</a>
+        <a href="#mochisearch%23count">MochiSearch#count</a>
       </div>
       <div class="heading h2">
-        <a href="#simplesearch%23close">SimpleSearch#close</a>
+        <a href="#mochisearch%23close">MochiSearch#close</a>
       </div>
     </div>
   </div>
@@ -62,7 +62,7 @@
 <span class="kr">import</span> <span class="nx">invariant</span> <span class="nx">from</span> <span class="s1">&#39;invariant&#39;</span>
 <span class="kr">const</span> <span class="nx">debug</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;debug&#39;</span><span class="p">)(</span><span class="s1">&#39;search&#39;</span><span class="p">)</span>
 
-<span class="kr">export</span> <span class="k">default</span> <span class="kr">class</span> <span class="nx">SimpleSearch</span> <span class="p">{</span>
+<span class="kr">export</span> <span class="k">default</span> <span class="kr">class</span> <span class="nx">MochiSearch</span> <span class="p">{</span>
 
 </pre></div>
         </td>
@@ -116,10 +116,10 @@
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
-<div class="pilwrap" id="simplesearch%23index">
+<div class="pilwrap" id="mochisearch%23index">
   <h2>
-    <a href="#simplesearch%23index" name="simplesearch%23index" class="pilcrow">&#182;</a>
-    SimpleSearch#index
+    <a href="#mochisearch%23index" name="mochisearch%23index" class="pilcrow">&#182;</a>
+    MochiSearch#index
   </h2>
 </div>
 
@@ -175,10 +175,10 @@
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
-<div class="pilwrap" id="simplesearch%23get">
+<div class="pilwrap" id="mochisearch%23get">
   <h2>
-    <a href="#simplesearch%23get" name="simplesearch%23get" class="pilcrow">&#182;</a>
-    SimpleSearch#get
+    <a href="#mochisearch%23get" name="mochisearch%23get" class="pilcrow">&#182;</a>
+    MochiSearch#get
   </h2>
 </div>
 
@@ -226,10 +226,10 @@
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
-<div class="pilwrap" id="simplesearch%23search">
+<div class="pilwrap" id="mochisearch%23search">
   <h2>
-    <a href="#simplesearch%23search" name="simplesearch%23search" class="pilcrow">&#182;</a>
-    SimpleSearch#search
+    <a href="#mochisearch%23search" name="mochisearch%23search" class="pilcrow">&#182;</a>
+    MochiSearch#search
   </h2>
 </div>
 
@@ -302,10 +302,10 @@
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
-<div class="pilwrap" id="simplesearch%23count">
+<div class="pilwrap" id="mochisearch%23count">
   <h2>
-    <a href="#simplesearch%23count" name="simplesearch%23count" class="pilcrow">&#182;</a>
-    SimpleSearch#count
+    <a href="#mochisearch%23count" name="mochisearch%23count" class="pilcrow">&#182;</a>
+    MochiSearch#count
   </h2>
 </div>
 
@@ -344,10 +344,10 @@
       <tr>
         <td class="docs"><div class="dox">
   <div class="summary">
-<div class="pilwrap" id="simplesearch%23close">
+<div class="pilwrap" id="mochisearch%23close">
   <h2>
-    <a href="#simplesearch%23close" name="simplesearch%23close" class="pilcrow">&#182;</a>
-    SimpleSearch#close
+    <a href="#mochisearch%23close" name="mochisearch%23close" class="pilcrow">&#182;</a>
+    MochiSearch#close
   </h2>
 </div>
 
@@ -361,35 +361,13 @@
         <td class="code highlight"><div class="highlight"><pre>
   <span class="nx">close</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">return</span> <span class="k">new</span> <span class="nx">Promise</span><span class="p">((</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
-</div>
-<p>clean up statemenets</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-      <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">statements</span><span class="p">).</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">s</span> <span class="o">=&gt;</span> <span class="nx">s</span><span class="p">.</span><span class="nx">finalize</span><span class="p">());</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
-</div>
-<p>clonse database</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-      <span class="k">this</span><span class="p">.</span><span class="nx">database</span><span class="p">.</span><span class="nx">close</span><span class="p">(</span><span class="nx">callback</span><span class="p">);</span>
-
-      <span class="nx">resolve</span><span class="p">();</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">database</span><span class="p">.</span><span class="nx">close</span><span class="p">((</span><span class="nx">error</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">reject</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+          <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nx">resolve</span><span class="p">();</span>
+      <span class="p">});</span>
     <span class="p">});</span>
   <span class="p">}</span>
 
@@ -402,7 +380,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
+  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
 </div>
 <div class="dox">
   <div class="summary"><p>a filter that convert rows of results into a document.</p>
@@ -426,7 +404,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-11" id="section-11">&#182;</a>
+  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
 </div>
 <div class="dox">
   <div class="summary"><p>a filter that convert rows of results into array of document objects.</p>
@@ -460,7 +438,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
+  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
 </div>
 <div class="dox">
   <div class="summary"><p>a filter that convert rows of results into array of document ids.</p>

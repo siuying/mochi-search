@@ -27,7 +27,7 @@ export default class MochiSearch {
   }
 
   /**
-   * ## SimpleSearch#index
+   * ## MochiSearch#index
    *
    * Index a document with given ID.
    * @param {integer} id document ID.
@@ -55,7 +55,7 @@ export default class MochiSearch {
   }
 
   /**
-   * ## SimpleSearch#get
+   * ## MochiSearch#get
    *
    * Get an indexed document by ID
    * @param {integer} id document ID.
@@ -79,7 +79,7 @@ export default class MochiSearch {
   }
 
   /**
-   * ## SimpleSearch#search
+   * ## MochiSearch#search
    *
    * Search a document by query.
    *
@@ -129,7 +129,7 @@ export default class MochiSearch {
   }
 
   /**
-   * ## SimpleSearch#count
+   * ## MochiSearch#count
    *
    * Count number of document indexed.
    *
@@ -150,7 +150,7 @@ export default class MochiSearch {
   }
 
   /**
-   * ## SimpleSearch#close
+   * ## MochiSearch#close
    * Close database
    */
   close() {
