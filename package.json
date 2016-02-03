@@ -1,5 +1,5 @@
 {
-  "name": "simple-search",
+  "name": "mochi-search",
   "version": "1.0.0",
   "description": "A simple full text search engine with CJK support for nodejs.",
   "main": "index.js",
@@ -19,6 +19,17 @@
     "sqlite3": "^3.1.1",
     "sqlite3-mozporter": "^1.0.1"
   },
+  "keywords": [
+    "full",
+    "text",
+    "search",
+    "simple",
+    "fts",
+    "sqlite",
+    "sqlite3",
+    "fts3",
+    "fts4"
+  ],
   "devDependencies": {
     "babel-cli": "^6.4.5",
     "babel-preset-es2015": "^6.3.13",

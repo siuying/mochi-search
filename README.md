@@ -1,13 +1,16 @@
-# Simple Search
+# Mochi Search
 
 A simple full text search engine with CJK support for nodejs.
 
+## Features
+
+- Full text search with CJK support.
+- No external dependency.
+
 ## Setup
 
-For now, install it using github version:
-
 ```
-npm install --save simple-search@siuying/simple-search
+npm install --save mochi-search
 ```
 
 ## Usage
