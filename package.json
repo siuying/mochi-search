@@ -1,7 +1,7 @@
 {
   "name": "simple-search",
   "version": "1.0.0",
-  "description": "",
+  "description": "A simple full text search engine with CJK support for nodejs.",
   "main": "index.js",
   "scripts": {
     "start": "babel src -d dist --watch",
@@ -9,7 +9,10 @@
     "docs": "docker -i src -o docs",
     "test": "DEBUG=search mocha --compilers js:babel-register"
   },
-  "author": "",
+  "author": {
+    "name": "Francis Chong",
+    "email": "francis@ignition.hk"
+  },
   "license": "MIT",
   "dependencies": {
     "invariant": "^2.2.0",
