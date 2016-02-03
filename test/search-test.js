@@ -1,11 +1,11 @@
-import SimpleSearch from '../src'
+import MochiSearch from '../src'
 import {expect} from 'chai'
 const debug = require('debug')('search')
 
-describe("SimpleSearch", () => {
+describe("MochiSearch", () => {
   describe("#index", () => {
     it("should index document", (done) => {
-      const search = new SimpleSearch(":memory:", (error, search) => {
+      const search = new MochiSearch(":memory:", (error, search) => {
         search.index(1, {title: "hello world", content: "this message is a hello world message"});
         search.index(2, {title: "urgent: serious", content: "This mail is seen as a more serious mail"});
         search.index(3, {title: "這是中文標題", content: "這是一封中文電郵的內容！"});
@@ -19,7 +19,7 @@ describe("SimpleSearch", () => {
 
   describe("#get", () => {
     it("should return document by id", (done) => {
-      const search = new SimpleSearch(":memory:", (error, search) => {
+      const search = new MochiSearch(":memory:", (error, search) => {
         search.index(1, {title: "hello world", content: "this message is a hello world message"});
         search.index(2, {title: "urgent: serious", content: "This mail is seen as a more serious mail"});
         search.index(3, {title: "這是中文標題", content: "這是一封中文電郵的內容！"});
@@ -33,7 +33,7 @@ describe("SimpleSearch", () => {
 
   describe("#search", () => {
     it("should search chinese (fetch document)", (done) => {
-      const search = new SimpleSearch(":memory:", (error, search) => {
+      const search = new MochiSearch(":memory:", (error, search) => {
         search.index(1, {title: "hello world", content: "this message is a hello world message"});
         search.index(2, {title: "urgent: serious", content: "This mail is seen as a more serious mail"});
         search.index(3, {title: "這是中文標題", content: "這是一封中文電郵的內容！"});
@@ -46,7 +46,7 @@ describe("SimpleSearch", () => {
     })
 
     it("should search chinese (fetch id only)", (done) => {
-      const search = new SimpleSearch(":memory:", (error, search) => {
+      const search = new MochiSearch(":memory:", (error, search) => {
         search.index(1, {title: "hello world", content: "this message is a hello world message"});
         search.index(2, {title: "urgent: serious", content: "This mail is seen as a more serious mail"});
         search.index(3, {title: "這是中文標題", content: "這是一封中文電郵的內容！"});

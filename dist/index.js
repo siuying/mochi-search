@@ -26,7 +26,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var debug = require('debug')('search');
 
-var SimpleSearch = function () {
+var MochiSearch = function () {
   /**
    * ## Constructor
    * Create a new instance.
@@ -35,10 +35,10 @@ var SimpleSearch = function () {
    * @param {function} callback A function that will be called when initialization completed.
    */
 
-  function SimpleSearch(filename, callback) {
+  function MochiSearch(filename, callback) {
     var _this = this;
 
-    _classCallCheck(this, SimpleSearch);
+    _classCallCheck(this, MochiSearch);
 
     debug("open database");
     this.database = (0, _sqlite3Mozporter2.default)(new _sqlite2.default.Database(filename));
@@ -59,7 +59,7 @@ var SimpleSearch = function () {
    * @return {Promise} return a promise resolved when index is completed.
    */
 
-  _createClass(SimpleSearch, [{
+  _createClass(MochiSearch, [{
     key: 'index',
     value: function index(id, doc) {
       var _this2 = this;
@@ -209,27 +209,25 @@ var SimpleSearch = function () {
       var _this6 = this;
 
       return new Promise(function (resolve, reject) {
-        // clean up statemenets
-        Object.keys(_this6.statements).forEach(function (s) {
-          return s.finalize();
+        _this6.database.close(function (error) {
+          if (error) {
+            reject(error);
+            return;
+          }
+          resolve();
         });
-
-        // clonse database
-        _this6.database.close(callback);
-
-        resolve();
       });
     }
   }]);
 
-  return SimpleSearch;
+  return MochiSearch;
 }();
 
 /**
  * a filter that convert rows of results into a document.
  */
 
-exports.default = SimpleSearch;
+exports.default = MochiSearch;
 function docWithResultSet(rows) {
   return rows.reduce(function (map, row) {
     map[row.field] = row.value;

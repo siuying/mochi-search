@@ -7,7 +7,7 @@ import mozporter from 'sqlite3-mozporter'
 import invariant from 'invariant'
 const debug = require('debug')('search')
 
-export default class SimpleSearch {
+export default class MochiSearch {
   /**
    * ## Constructor
    * Create a new instance.
