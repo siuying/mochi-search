@@ -155,13 +155,13 @@ export default class SimpleSearch {
    */
   close() {
     return new Promise((resolve, reject) => {
-      // clean up statemenets
-      Object.keys(this.statements).forEach(s => s.finalize());
-
-      // clonse database
-      this.database.close(callback);
-
-      resolve();
+      this.database.close((error) => {
+        if (error) {
+          reject(error);
+          return;
+        }
+        resolve();
+      });
     });
   }
 
