@@ -149,7 +149,10 @@ export default class SimpleSearch {
     });
   }
 
-  // close database
+  /**
+   * ## SimpleSearch#close
+   * Close database
+   */
   close() {
     return new Promise((resolve, reject) => {
       // clean up statemenets
