@@ -52,31 +52,36 @@ export default class SimpleSearch {
     invariant(id, "id cannot be nil");
     invariant(doc, "doc cannot be nil");
 
-    this.database.serialize(() => {
-      this.database.run(`begin transaction`);
-      this.database.run(`delete from ig_search where doc_id = ?`, id);
-      var stmt = this.database.prepare("insert into ig_search (doc_id, field, value) values (?, ?, ?)");
-      Object.keys(doc).forEach((key) => {
-        const value = doc[key];
-        stmt.run(id, key, value);
+    return new Promise((resolve, reject) => {
+      this.database.serialize(() => {
+        this.database.run(`begin transaction`);
+        this.database.run(`delete from ig_search where doc_id = ?`, id);
+        var stmt = this.database.prepare("insert into ig_search (doc_id, field, value) values (?, ?, ?)");
+        Object.keys(doc).forEach((key) => {
+          const value = doc[key];
+          stmt.run(id, key, value);
+        });
+        stmt.finalize();
+        this.database.run(`commit transaction`);
+        resolve();
       });
-      stmt.finalize();
-      this.database.run(`commit transaction`);
-      if (callback) callback();
     });
   }
 
   // Get an indexed document by ID
   get(id, callback) {
     invariant(id, "id cannot be nil");
-    this.database.serialize(() => {
-      this.database.all(`SELECT field, value FROM ig_search WHERE doc_id = ?`, id, (error, rows) => {
-        if (error) {
-          callback(error);
-          return
-        }
 
-        callback(null, docWithResultSet(rows));
+    return new Promise((resolve, reject) => {
+      this.database.serialize(() => {
+        this.database.all(`SELECT field, value FROM ig_search WHERE doc_id = ?`, id, (error, rows) => {
+          if (error) {
+            reject(error);
+            return
+          }
+
+          resolve(docWithResultSet(rows));
+        });
       });
     });
   }
@@ -84,77 +89,71 @@ export default class SimpleSearch {
   search(options, callback) {
     const {query, field, fetchIdOnly} = Object.assign({}, {field: null, fetchIdOnly: false}, options);
     invariant(query, "query cannot be null");
+    return new Promise((resolve, reject) => {
+      let sql = "";
+      if (fetchIdOnly) {
+        sql += "SELECT doc_id FROM ig_search \n";
+        sql += "JOIN ( SELECT distinct doc_id, rank(matchinfo(ig_search), 1) AS rank FROM ig_search ";
+      } else {
+        sql += "SELECT doc_id, field, value FROM ig_search \n";
+        sql += "JOIN ( SELECT doc_id, rank(matchinfo(ig_search), 1) AS rank FROM ig_search ";
+      }
+      if (!field) {
+        sql += "WHERE value MATCH ? ";
+      } else {
+        sql += "WHERE field = ? AND value MATCH ? ";
+      }
+      sql += "ORDER BY rank DESC ) \nAS ranktable USING(doc_id) \n";
+      sql += "ORDER BY ranktable.rank DESC \n";
 
-    let sql = "";
-    if (fetchIdOnly) {
-      sql += "SELECT doc_id FROM ig_search \n";
-      sql += "JOIN ( SELECT distinct doc_id, rank(matchinfo(ig_search), 1) AS rank FROM ig_search ";
-    } else {
-      sql += "SELECT doc_id, field, value FROM ig_search \n";
-      sql += "JOIN ( SELECT doc_id, rank(matchinfo(ig_search), 1) AS rank FROM ig_search ";
-    }
-    if (!field) {
-      sql += "WHERE value MATCH ? ";
-    } else {
-      sql += "WHERE field = ? AND value MATCH ? ";
-    }
-    sql += "ORDER BY rank DESC ) \nAS ranktable USING(doc_id) \n";
-    sql += "ORDER BY ranktable.rank DESC \n";
-
-    let queryCallback = null
-    if (fetchIdOnly) {
-      queryCallback = (error, result) => {
+      let processor = fetchIdOnly ? docIdsWithResultSet : docsWithResultSet;
+      let callback = (error, result) => {
         if (error) {
-          callback(error);
+          reject(error);
           return
         }
-
-        callback(null, docIdsWithResultSet(result))
+        resolve(processor(result));
       };
-    } else {
-      queryCallback = (error, result) => {
-        if (error) {
-          callback(error);
-          return
-        }
-
-        callback(null, docsWithResultSet(result))
-      };
-    }
-
-    if (!field) {
-      debug(sql, query);
-      this.database.serialize(() => {
-        this.database.all(sql, query, queryCallback);
-      });
-    } else {
-      debug(sql, field, query);
-      this.database.serialize(() => {
-        this.database.all(sql, field, query, queryCallback);
-      });
-    }
+      if (!field) {
+        debug(sql, query);
+        this.database.serialize(() => {
+          this.database.all(sql, query, callback);
+        });
+      } else {
+        debug(sql, field, query);
+        this.database.serialize(() => {
+          this.database.all(sql, field, query, callback);
+        });
+      }
+    });
   }
 
   // Count number of document indexed
   count(callback) {
-    this.database.get(`select count(distinct doc_id) as count from ig_search`, (error, result) => {
-      if (error) {
-        callback(error);
-        return
-      }
+    return new Promise((resolve, reject) => {
+      this.database.get(`select count(distinct doc_id) as count from ig_search`, (error, result) => {
+        if (error) {
+          reject(error);
+          return
+        }
 
-      callback(null, result.count);
-      return
+        resolve(result.count);
+        return
+      });
     });
   }
 
   // close database
   close(callback) {
-    // clean up statemenets
-    Object.keys(this.statements).forEach(s => s.finalize());
+    return new Promise((resolve, reject) => {
+      // clean up statemenets
+      Object.keys(this.statements).forEach(s => s.finalize());
 
-    // clonse database
-    this.database.close(callback);
+      // clonse database
+      this.database.close(callback);
+
+      resolve();
+    });
   }
 
 }
