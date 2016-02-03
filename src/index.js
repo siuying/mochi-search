@@ -37,7 +37,7 @@ const docIdsWithResultSet = (rows) => {
 
 export default class SimpleSearch {
   constructor(filename, callback) {
-    debug("create database")
+    debug("open database")
     this.database = mozporter(new sqlite.Database(filename));
     this.database.serialize(() => {
       this.database.run(`CREATE VIRTUAL TABLE IF NOT EXISTS ig_search USING FTS4 (id, doc_id, field, value, tokenize=mozporter)`);
@@ -53,6 +53,7 @@ export default class SimpleSearch {
     invariant(doc, "doc cannot be nil");
 
     this.database.serialize(() => {
+      this.database.run(`begin transaction`);
       this.database.run(`delete from ig_search where doc_id = ?`, id);
       var stmt = this.database.prepare("insert into ig_search (doc_id, field, value) values (?, ?, ?)");
       Object.keys(doc).forEach((key) => {
@@ -60,6 +61,7 @@ export default class SimpleSearch {
         stmt.run(id, key, value);
       });
       stmt.finalize();
+      this.database.run(`commit transaction`);
       if (callback) callback();
     });
   }
