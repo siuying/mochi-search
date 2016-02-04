@@ -106,7 +106,7 @@ var MochiSearch = function () {
               return;
             }
 
-            resolve(docWithResultSet(rows));
+            resolve(docWithResultSet(rows, id));
           });
         });
       });
@@ -257,9 +257,10 @@ var MochiSearch = function () {
  */
 
 exports.default = MochiSearch;
-function docWithResultSet(rows) {
+function docWithResultSet(rows, id) {
   return rows.reduce(function (map, row) {
     map[row.field] = row.value;
+    map['id'] = id;
     return map;
   }, {});
 }
@@ -275,7 +276,7 @@ function docsWithResultSet(rows) {
 
     var doc = map[docId];
     if (!doc) {
-      doc = {};
+      doc = { id: docId };
       map[docId] = doc;
     }
     doc[field] = value;

@@ -64,7 +64,7 @@ describe("MochiSearch", () => {
           expect(result.length).to.equal(1);
           expect(result[0]).to.deep.equal({id: 3, title: "這是中文標題", content: "這是一封中文電郵的內容！"});
           done();
-        })
+        });
       });
     })
 
