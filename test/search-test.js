@@ -24,7 +24,7 @@ describe("MochiSearch", () => {
         search.index(2, {title: "urgent: serious", content: "This mail is seen as a more serious mail"});
         search.index(3, {title: "這是中文標題", content: "這是一封中文電郵的內容！"});
         search.get(3).then((result) => {
-          expect(result).to.deep.equal({title: "這是中文標題", content: "這是一封中文電郵的內容！"});
+          expect(result).to.deep.equal({id: 3, title: "這是中文標題", content: "這是一封中文電郵的內容！"});
           done();
         })
       });
@@ -62,7 +62,7 @@ describe("MochiSearch", () => {
         search.index(3, {title: "這是中文標題", content: "這是一封中文電郵的內容！"});
         search.search({query: "中文", fetchIdOnly: false}).then((result) => {
           expect(result.length).to.equal(1);
-          expect(result[0]).to.deep.equal({title: "這是中文標題", content: "這是一封中文電郵的內容！"});
+          expect(result[0]).to.deep.equal({id: 3, title: "這是中文標題", content: "這是一封中文電郵的內容！"});
           done();
         })
       });

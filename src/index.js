@@ -72,7 +72,7 @@ export default class MochiSearch {
             return
           }
 
-          resolve(docWithResultSet(rows));
+          resolve(docWithResultSet(rows, id));
         });
       });
     });
@@ -194,9 +194,10 @@ export default class MochiSearch {
 /**
  * a filter that convert rows of results into a document.
  */
-function docWithResultSet(rows) {
+function docWithResultSet(rows, id) {
   return rows.reduce((map, row) => {
     map[row.field] = row.value
+    map['id'] = id
     return map
   } , {})
 }
@@ -212,7 +213,7 @@ function docsWithResultSet(rows) {
 
     let doc = map[docId]
     if (!doc) {
-      doc = {}
+      doc = {id: docId}
       map[docId] = doc
     }
     doc[field] = value
