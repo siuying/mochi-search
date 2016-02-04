@@ -4,6 +4,8 @@ A simple full text search engine with CJK support for nodejs.
 
 ## Features
 
+![review.gif](/web/preview.gif)
+
 - Full text search with CJK support.
 - No external dependency.
 
