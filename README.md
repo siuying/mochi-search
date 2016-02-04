@@ -15,7 +15,9 @@ npm install --save mochi-search
 
 ## Usage
 
-TBA
+### Reference
+
+[API Document](https://siuying.github.io/mochi-search/index.js.html)
 
 ## Credits
 
