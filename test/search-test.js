@@ -31,6 +31,29 @@ describe("MochiSearch", () => {
     });
   });
 
+  describe("#delete", () => {
+    it("should delete indexed document", (done) => {
+      const search = new MochiSearch(":memory:", (error, search) => {
+        search.index(1, {title: "hello world", content: "this message is a hello world message"});
+        search.index(2, {title: "urgent: serious", content: "This mail is seen as a more serious mail"});
+        search.index(3, {title: "這是中文標題", content: "這是一封中文電郵的內容！"});
+        search.count().then((result) => {
+          expect(result).to.equal(3);
+
+        }).then(() => {
+          search.delete(3);
+
+        }).then(() => {
+          search.count().then((result) => {
+            expect(result).to.equal(2);
+            done();
+          });
+        });
+
+      });
+    });
+  });
+
   describe("#search", () => {
     it("should search chinese (fetch document)", (done) => {
       const search = new MochiSearch(":memory:", (error, search) => {

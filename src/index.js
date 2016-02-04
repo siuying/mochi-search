@@ -129,6 +129,30 @@ export default class MochiSearch {
   }
 
   /**
+   * ## MochiSearch#delete
+   *
+   * Delete a document from index.
+   *
+   * @return {Promise} return a promise to resolve when the document is deleted.
+   */
+  delete(id) {
+    invariant(id, "id cannot be nil");
+
+    return new Promise((resolve, reject) => {
+      this.database.serialize(() => {
+        this.database.run(`delete from ig_search where doc_id = ?`, id, (error, result) => {
+          if (error) {
+            reject(error);
+            return
+          }
+
+          resolve();
+        });
+      });
+    });
+  }
+
+  /**
    * ## MochiSearch#count
    *
    * Count number of document indexed.

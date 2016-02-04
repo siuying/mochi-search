@@ -51,7 +51,7 @@ var MochiSearch = function () {
   }
 
   /**
-   * ## SimpleSearch#index
+   * ## MochiSearch#index
    *
    * Index a document with given ID.
    * @param {integer} id document ID.
@@ -84,7 +84,7 @@ var MochiSearch = function () {
     }
 
     /**
-     * ## SimpleSearch#get
+     * ## MochiSearch#get
      *
      * Get an indexed document by ID
      * @param {integer} id document ID.
@@ -113,7 +113,7 @@ var MochiSearch = function () {
     }
 
     /**
-     * ## SimpleSearch#search
+     * ## MochiSearch#search
      *
      * Search a document by query.
      *
@@ -173,7 +173,36 @@ var MochiSearch = function () {
     }
 
     /**
-     * ## SimpleSearch#count
+     * ## MochiSearch#delete
+     *
+     * Delete a document from index.
+     *
+     * @return {Promise} return a promise to resolve when the document is deleted.
+     */
+
+  }, {
+    key: 'delete',
+    value: function _delete(id) {
+      var _this5 = this;
+
+      (0, _invariant2.default)(id, "id cannot be nil");
+
+      return new Promise(function (resolve, reject) {
+        _this5.database.serialize(function () {
+          _this5.database.run('delete from ig_search where doc_id = ?', id, function (error, result) {
+            if (error) {
+              reject(error);
+              return;
+            }
+
+            resolve();
+          });
+        });
+      });
+    }
+
+    /**
+     * ## MochiSearch#count
      *
      * Count number of document indexed.
      *
@@ -183,10 +212,10 @@ var MochiSearch = function () {
   }, {
     key: 'count',
     value: function count() {
-      var _this5 = this;
+      var _this6 = this;
 
       return new Promise(function (resolve, reject) {
-        _this5.database.get('select count(distinct doc_id) as count from ig_search', function (error, result) {
+        _this6.database.get('select count(distinct doc_id) as count from ig_search', function (error, result) {
           if (error) {
             reject(error);
             return;
@@ -199,17 +228,17 @@ var MochiSearch = function () {
     }
 
     /**
-     * ## SimpleSearch#close
+     * ## MochiSearch#close
      * Close database
      */
 
   }, {
     key: 'close',
     value: function close() {
-      var _this6 = this;
+      var _this7 = this;
 
       return new Promise(function (resolve, reject) {
-        _this6.database.close(function (error) {
+        _this7.database.close(function (error) {
           if (error) {
             reject(error);
             return;
